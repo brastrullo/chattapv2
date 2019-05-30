@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "firebase": "^6.0.1",
+    "namor": "^1.1.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.0",
+    "socket.io-client": "^2.2.0",
     "styled-components": "^4.2.0"
   },
   "scripts": {
@@ -31,5 +34,9 @@
   },
   "devDependencies": {
     "standard": "^12.0.1"
-  }
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC"
 }
