@@ -65,11 +65,12 @@ class Firebase {
           }
 
           this.rt.ref('.info/connected').on('value', snapshot => {
-            if (snapshot.val() == false) return
+            if (!snapshot.val()) return
             userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(() => {
               userStatusDatabaseRef.set(isOnlineForDatabase)
             })
           })
+
           this.userObj = user
           unsubscribe()
           return user
@@ -115,20 +116,6 @@ class Firebase {
       return contact.data().displayName
     }
 
-    contactsOnlineListener = () => {
-      const userStatusDatabaseRef = this.rt.ref('/status/')
-      userStatusDatabaseRef.on('value', snapshot => {
-        const users = snapshot.val()
-        console.log('snapshotssss', users)
-      })
-    }
-
-    // getUserThreadIds = async () => {
-    //   let fetch = await this.db.collection("users").doc(this.userObj.uid).get()
-    //   let filteredThreads = fetch.data().threads
-    //   return await filteredThreads
-    // }
-
     contactsFromUsersSnapshotHelper = (snapshot, uid = this.auth.currentUser.uid) => {
       if (this.auth.currentUser.isAnonymous) return null
       const users = snapshot.docs.map(doc => doc.data())
@@ -162,3 +149,17 @@ class Firebase {
 }
 
 export default Firebase
+
+    // contactsOnlineListener = () => {
+    //   const userStatusDatabaseRef = this.rt.ref('/status/')
+    //   userStatusDatabaseRef.on('value', snapshot => {
+    //     const users = snapshot.val()
+    //     console.log('USERS ONLINE:', users)
+    //   })
+    // }
+
+    // getUserThreadIds = async () => {
+    //   let fetch = await this.db.collection("users").doc(this.userObj.uid).get()
+    //   let filteredThreads = fetch.data().threads
+    //   return await filteredThreads
+    // }

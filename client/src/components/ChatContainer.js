@@ -5,16 +5,34 @@ import styled from 'styled-components'
 import ChatThreads from './ChatThreads'
 
 const StyledSection = styled.section`
-  width: 60%;
-  max-width: 80rem;
-  margin: 5rem auto;
+  position: relative;
   background: whitesmoke;
+  height: 100%;
+  width: 100%;
+  max-width: 40rem;
+  margin: auto;
+  box-shadow: 0 0 1rem lightgrey;
+  overflow: hidden;
+
+  .signOutBtn {
+    border: none;
+    margin: .5rem;
+    padding: 0;
+    color: darkgrey;
+    text-shadow: 0 0 1px lightgrey;
+    background: none;
+    position: absolute;
+    z-index: 999999999999;
+    right: 0;
+    top: 0;
+  }
 `
 
 const ChatContainer = (props) => {
   const { firebase, authObj, signUserOut } = props
   const [thread, setThread] = useState(null)
   const [threadId, setThreadId] = useState(null)
+  const [contactName, setContactName] = useState(null)
   const threadSelected = threadId ? threadId : null
   const [contacts, setContacts] = useState(null)
   const [msgPreviews, setMsgPreviews] = useState(null)
@@ -26,7 +44,7 @@ const ChatContainer = (props) => {
   useEffect(() => {if (usersOnline !== null) console.log('USERS ONLINE: ', usersOnline)}, [usersOnline])
   useEffect(() => {if (contacts !== null) console.log('CONTACTS: ', contacts)}, [contacts])
   useEffect(() => {if (msgPreviews !== null) console.log('MSG_PREVIEWS: ', msgPreviews)}, [msgPreviews])
-  useEffect(() => {if (thread !== null) console.log('THREAD: ', thread)}, [thread])
+  useEffect(() => {if (thread !== null) console.log('THREAD: ', contactName, thread)}, [contactName, thread])
 
   useEffect(() => {
     const contactsArrayListener = () => firebase.db.collection('users').onSnapshot(snapshot => {
@@ -49,7 +67,7 @@ const ChatContainer = (props) => {
           })
         })
         const msgPreviewHelper = (snapshot, contact, obj) => {
-          const lastMsg = Object.values(snapshot.data())[0]
+          const lastMsg = Object.values(snapshot.data()).sort((a, b) => b.timestamp - a.timestamp)[0]
           const messageObj = {
             'id'          : contact.id,
             'displayName' : contact.displayName,
@@ -78,14 +96,20 @@ const ChatContainer = (props) => {
       const filtered = Object.entries(snapshot.val())
         .map(user => ({ ...user[1], 'uid': user[0]}))
         .filter(obj => obj.state === 'online')
-        
+
       setUsersOnline({...filtered})
     })
   }, [firebase])
 
-  const threadClicked = (threadId) => {
-    console.log('thread selected: ', threadId)
+  const threadClicked = (threadId, contactName) => {
+    console.log('thread selected: ', contactName, threadId)
+    setContactName(contactName)
     setThreadId(threadId)
+  }
+
+  const deselectThread = () => {
+    setContactName(null)
+    setThreadId(null)
   }
 
   const sendMessage = (messageText) => {
@@ -104,10 +128,10 @@ const ChatContainer = (props) => {
   
   return (
     <StyledSection>
-      <button onClick={signOut}>sign out</button>
+      <button className="signOutBtn" onClick={signOut}>sign out</button>
       { threadSelected &&  thread ? (
             <>
-              <ChatArea authObj={authObj} thread={thread} />
+              <ChatArea authObj={authObj} thread={thread} contactName={contactName} backToThreads={() => deselectThread()} />
               <ChatInput sendMessage={sendMessage} />
             </>
         ) : (
@@ -124,7 +148,7 @@ const ChatContainer = (props) => {
                   getContactDisplayName={(id) => firebase.getContactDisplayName(id)}
                 />
               ) : (
-                <p>Loading...{` yes${authObj.isAnonymous}`}</p>
+                <p>Loading...</p>
               )
             }
           </>

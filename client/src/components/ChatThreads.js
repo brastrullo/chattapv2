@@ -10,12 +10,16 @@ const StyledList = styled.ul`
     margin: 0;
     list-style-type: none;
     z-index: -1;
+    box-shadow: 0 1px 10px lightgray;
 
     li {
       display: flex;
+      justify-content: flex-start;
+      align-items: center;
       flex-flow: row nowrap;
       background: white;
       width: 100%;
+      height: 6rem;
       padding: 1rem;
       & + li {
         border-top: 1px solid lightgrey;
@@ -28,6 +32,8 @@ const StyledList = styled.ul`
         margin-right: 1rem;
       }
       .text {
+        text-align: left;
+        width: calc(100% - 3.5rem - 2rem);
         flex-flow: column nowrap;
         justify-content: flex-start;
         align-items: flex-start;
@@ -41,7 +47,10 @@ const StyledList = styled.ul`
           margin: 0;
           padding: 0;
           display: block;
-          max-width: 60%;
+        }
+        small {
+          font-size: .8rem;
+          color: grey;
         }
       }
     }
@@ -50,13 +59,11 @@ const StyledList = styled.ul`
 const StyledDiv = styled.div`
   & {
     position: relative;
-    height: 40rem;
-    max-height: 90vh;
-    box-shadow: 0 1px 10px lightgray;
+    height: 100%;
     text-shadow: 0 1px 2px lightgray;
     header {
       position: relative;
-      padding: .5rem 2rem;
+      padding: .5rem;
       color: white;
       display: flex;
       flex-flow: column nowrap;
@@ -102,22 +109,25 @@ const ChatThreads = (props) => {
   const username = authObj.displayName ? authObj.displayName: authObj.email
   const [isModalShown, setIsModalShown] = useState(false)
 
-  const clickHandler = (e) => {
-    const id = e.target.getAttribute('thread')
-    threadClicked(id)
-  }
-
   const Threads = () => {
     const arr = msgPreviews ? Object.values(msgPreviews).map(obj => obj) : []
-    return arr.map((thread, i) => (
-      <li key={i} onClick={clickHandler} thread={thread.id}>
-        <div className="display-picture" src="/" alt="display-picture"/>
-        <div className="text">
-          <span>{thread.displayName}</span>
-          <p>{thread.messageText}</p>
-        </div>
-      </li>
-    ))
+    const selectThread = (id, contact) => {
+      threadClicked(id, contact)
+    }
+    return arr.map((thread, i) => {
+      const timestamp = new Date(thread.timestamp).toLocaleString()
+      return (
+        <li key={i} onClick={() => selectThread(thread.id, thread.displayName)}>
+          <div className="display-picture" src="/" alt="display-picture"/>
+          <div className="text">
+            <span>{thread.displayName}</span>
+            <p>{thread.messageText}</p>
+            <small>{`${timestamp}`}</small>
+          </div>
+        </li>
+      )
+
+    })
   }
   
   const newThread = ({className}) => {

@@ -3,15 +3,20 @@ import styled from 'styled-components'
 
 const StyledForm = styled.form`
   & {
+    position: absolute;
+    width: calc(100% - (.5rem * 2));
+    height: 2.5rem;
+    bottom: 0;
     display: flex;
     flex-flow: row nowrap;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     margin: .5rem;
-    padding: .1rem 1rem .1rem;
+    padding: 0 .25rem 0 1rem;
     box-shadow: 0px 1px 5px lightgray;
     background: white;
-    border-radius: 5px;
+    border-radius: 25rem;
+
     label {
       display: none;
       visibility: hidden;
@@ -26,7 +31,6 @@ const StyledForm = styled.form`
     }
     .submit-btn {
       font-size: 1.2rem;
-      margin: 2px;
       color: white;
       height: 2rem;
       width: 2rem;
@@ -72,6 +76,7 @@ const ChatInput = (props) => {
           name="message"
           value={message}
           onChange={updateMessage}
+          autoComplete="off"
         />
         <label htmlFor="submit"></label>
       <input className="submit-btn" type="submit" id="submit" name="submit" value="#"/>

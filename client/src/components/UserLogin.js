@@ -3,16 +3,16 @@ import styled from 'styled-components'
 
 const StyledSection = styled.section`
   & {
+    box-sizing: content-box;
     display: flex;
     flex-flow: column nowrap;
-    width: 60%;
-    height: 100%;
-    max-width: 50rem;
-    margin: 5rem auto;
-    justify-content: center;
+    margin: auto;
+    padding-top: 5rem;
+    justify-content: flex-start;
     align-items: center;
     color: slategray;
     text-shadow: 1px 0 1px lightgray;
+    overflow: scroll;
     form {
       padding: 0;
       width: 20rem;
