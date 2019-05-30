@@ -1,0 +1,4 @@
+client/src/Firebase/admin.js
+client/src/Firebase/serviceAccountKey.json
+client/.env
+client/src/.env
