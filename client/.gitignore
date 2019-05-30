@@ -2,6 +2,7 @@
 
 #firebase
 /Firebase/serviceAccountKey.json
+/Firebase/admin.js
 
 # dependencies
 node_modules

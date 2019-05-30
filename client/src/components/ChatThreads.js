@@ -126,7 +126,6 @@ const ChatThreads = (props) => {
           </div>
         </li>
       )
-
     })
   }
   
